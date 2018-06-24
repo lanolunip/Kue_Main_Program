@@ -1,2 +1,4 @@
 # Kue_Main_Program
-Belum dimasukan ke file
+By : lanolunip
+
+special thanks to Bepyhx
