@@ -84,7 +84,7 @@ int main_menu(){
     printf ("3. Sortir\n");
     printf ("4. Visibilitas Data\n");
     printf ("5. Tampilan Data yang akan dimasukan di file\n");
-    printf ("Selain itu, keluar\n");
+    printf ("Selain itu keluar dan simpan file dalam file kue.txt\n");
     printf ("----------------------------------------------------\n");
     int masukan;
     printf("Pilih angka 1 - 5 = ");scanf("%d",&masukan);
@@ -453,6 +453,23 @@ void visibilitas(){
         }
     }
 }
+
+void write_to_file(){
+    FILE *fptr;
+    data *temp = head;
+    int nomor = 1;
+    fptr = fopen("kue.txt","w");
+    fprintf(fptr,"\n| %2s | %-20s | %-9s | %-10s | %-6s |\n","NO","NAMA KUE","JENIS KUE","HARGA","STOCK");
+    while (temp != NULL)
+	{
+        if(temp->visibilitas==true){
+            fprintf(fptr,"| %-2d | %-20s | %-9s | Rp.%-7d | %-6d |\n",nomor,temp->nama_kue,temp->jenis_kue,temp->harga_kue,temp->stock_kue);
+            ++nomor;
+        }
+		temp = temp -> next;
+	}   
+    fclose(fptr);
+}
 //################### main part
 int main(){
     int pilihan = 1;
@@ -476,4 +493,5 @@ int main(){
             getchar();getchar();
         }
     }
+    write_to_file();
 }
