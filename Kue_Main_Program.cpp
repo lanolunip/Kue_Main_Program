@@ -1,53 +1,53 @@
-#include "stdio.h"
-#include "string.h"
-#include "stdlib.h"
-#include "stdbool.h"
+#include "stdio.h" //Input Output Library
+#include "string.h" //String Library
+#include "stdlib.h" //standard Library
+#include "stdbool.h" // Boolean Library 
 
 int jumlah_data = 0;
 struct data{
-    int harga_kue,stock_kue;
-    char jenis_kue[20];
-    char nama_kue[20];
-    bool visibilitas;
-    struct data *next;
-}*head = NULL,*tail = NULL;
+    int harga_kue,stock_kue; //inisialisasi harga_kue,stock_kue (tipe int)
+    char jenis_kue[20]; //inisialisasi jenis_kue (string)
+    char nama_kue[20]; //inisialisasi jenis_kue (string)
+    bool visibilitas; //inisialisasi visibilitas (bool)
+    struct data *next; //inisialisasi pointer next ke struct lain nya 
+}*head = NULL,*tail = NULL; //men-struct head dan tail 
 
 void pushtail(int harga_kue,int stock_kue,char nama_kue[50],char jenis_kue[50],bool visibilitas)
 {
     // temp = (struct data *)malloc(sizeof(struct data));/ /<-- extensi C 
-    data *temp = (data *)malloc(sizeof(data)); //<-- ekstensi cpp
+    data *temp = (data *)malloc(sizeof(data)); //<-- ekstensi cpp | Mengalokasikan temp dan dibuat jadi struct data
     //Data Int
     temp->harga_kue = harga_kue;
     temp->stock_kue = stock_kue;
     //Data Char
-    strcpy(temp->nama_kue, nama_kue);
+    strcpy(temp->nama_kue, nama_kue); //Copy data tipe string --> sama seperti temp->nama_kue = nama_kue .. cuman karena string .. harus pakai strcpy()
     strcpy(temp->jenis_kue, jenis_kue);
     //Data Bool
     temp->visibilitas =  visibilitas;
 
-    if (head == NULL)
+    if (head == NULL) //jika pointer head masih NULL 
     {
-        head = tail = temp;
+        head = tail = temp; //struct head , tail , temp di samakan
     }
     else
     {
-        tail->next = temp;
-        tail = temp;
+        tail->next = temp; //data selanjutnya setelah tail adalah data temp
+        tail = temp; // memberitahu bahwa sekarang tail nya adalah temp
     }
-    ++jumlah_data;
-    tail->next = NULL;
+    ++jumlah_data; //tambah jumlah data
+    tail->next = NULL; // karena tail berpindah tempat ke paling akhir maka pointer selanjutnya adalah NULL karena belum ada data
 }
 //###################### view_data part
-void view()
+void view() //tampilan data
 {
-	data *temp = head;
+	data *temp = head; //pointer temp ke head data
     int nomor = 1;
     
-    system("clear");
-    printf("\n| %2s | %-20s | %-9s | %-10s | %-6s | %-11s |\n","NO","NAMA KUE","JENIS KUE","HARGA","STOCK","VISIBILITAS");
-	while (temp != NULL)
+    system("clear"); 
+    printf("\n| %2s | %-20s | %-9s | %-10s | %-6s | %-11s |\n","NO","NAMA KUE","JENIS KUE","HARGA","STOCK","VISIBILITAS"); //Kop tabel
+	while (temp != NULL) //selama pointer temp tidak null .. print semua data di pointer temp.... 
 	{
-        if(temp->visibilitas==true){
+        if(temp->visibilitas==true){ 
             printf("| %-2d | %-20s | %-9s | Rp.%-7d | %-6d | %-11s |",nomor,temp->nama_kue,temp->jenis_kue,temp->harga_kue,temp->stock_kue,"TRUE");
         }
         else{
@@ -55,10 +55,10 @@ void view()
         }
         puts(" ");
         ++nomor;
-		temp = temp -> next;
+		temp = temp -> next; //berpindah ke pointer selanjutnya
 	}
 }
-void view_result(){
+void view_result(){ // sama seperti view hanya saja yang akan di print ke file hanya yang visibilitas nya == True
     data *temp = head;
     int nomor = 1;
     
@@ -101,7 +101,7 @@ bool tambah(){
 
     system("clear");
     printf(" ");fgets(nama_kue,20,stdin);fflush(stdin); //<-- Tumbal ... entah kenapa tidak mau mengambil string nya
-    printf("Masukan nama kue = ");scanf("%[^\n]s",merit);
+    printf("Masukan nama kue = ");scanf("%[^\n]s",merit); //[^\n]s ini agar kita dapat memasukan data spasi .. karena string mencari spasi .. jadi kita rubah mencari enter atau \n
     printf("Masukan jenis kue (Ex. kering/basah) = ");scanf("%s",jenis_kue);
     printf("Masukan harga kue = ");scanf("%d",&harga_kue);
     printf("Masukan stock kue = ");scanf("%d",&stock_kue);
@@ -130,7 +130,7 @@ bool tambah(){
     return ulang;
 }
 
-void add_data(){
+void add_data(){ // main 
     bool ulang_tambah = true;
     bool ulang_edit = true;
     char  ulang_edit_tanya[1];
@@ -262,7 +262,7 @@ void edit_kue_status(){
     }
 }   
 
-void edit_data(){
+void edit_data(){ //main
     bool ulang_pilihan = true;
 
     while (ulang_pilihan == true){
@@ -408,7 +408,7 @@ void sortir_data(){
     }
 }
 //################### visibilitas part
-void visibilitas(){
+void visibilitas(){ // untuk edit visibilitas nya saja .
     bool ulang_pilihan = true;
     char ulang_pilihan_tanya[1];
     int pilihan_data;
@@ -454,12 +454,12 @@ void visibilitas(){
     }
 }
 
-void write_to_file(){
-    FILE *fptr;
-    data *temp = head;
+void write_to_file(){ //
+    FILE *fptr; //inisialisasi fptr pointer ke sebuah FILE
+    data *temp = head; //pointer temporary ke head data
     int nomor = 1;
-    fptr = fopen("kue.txt","w");
-    fprintf(fptr,"\n| %2s | %-20s | %-9s | %-10s | %-6s |\n","NO","NAMA KUE","JENIS KUE","HARGA","STOCK");
+    fptr = fopen("kue.txt","w"); //membuat file baru dengan nama kue.txt
+    fprintf(fptr,"\n| %2s | %-20s | %-9s | %-10s | %-6s |\n","NO","NAMA KUE","JENIS KUE","HARGA","STOCK"); //hampir sama dengan printf .. fprintf untuk print ke file dengan bentuk fprintf(file,data,format)
     while (temp != NULL)
 	{
         if(temp->visibilitas==true){
@@ -468,7 +468,7 @@ void write_to_file(){
         }
 		temp = temp -> next;
 	}   
-    fclose(fptr);
+    fclose(fptr); //setelah di isi .file di tutup
 }
 //################### main part
 int main(){
