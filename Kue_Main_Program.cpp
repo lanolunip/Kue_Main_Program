@@ -43,15 +43,14 @@ void view() //tampilan data
 	data *temp = head; //pointer temp ke head data
     int nomor = 1;
     
-    system("clear"); 
-    printf("\n| %2s | %-20s | %-9s | %-10s | %-6s | %-11s |\n","NO","NAMA KUE","JENIS KUE","HARGA","STOCK","VISIBILITAS"); //Kop tabel
+    printf("| %2s | %-20s | %-17s | %-10s | %-6s | %-11s |\n","NO","NAMA KUE","JENIS KUE","HARGA","STOCK","VISIBILITAS"); //Kop tabel
 	while (temp != NULL) //selama pointer temp tidak null .. print semua data di pointer temp.... 
 	{
         if(temp->visibilitas==true){ 
-            printf("| %-2d | %-20s | %-9s | Rp.%-7d | %-6d | %-11s |",nomor,temp->nama_kue,temp->jenis_kue,temp->harga_kue,temp->stock_kue,"TRUE");
+            printf("| %-2d | %-20s | %-17s | Rp.%-7d | %-6d | %-11s |",nomor,temp->nama_kue,temp->jenis_kue,temp->harga_kue,temp->stock_kue,"TRUE");
         }
         else{
-            printf("| %-2d | %-20s | %-9s | Rp.%-7d | %-6d | %-11s |",nomor,temp->nama_kue,temp->jenis_kue,temp->harga_kue,temp->stock_kue,"FALSE");
+            printf("| %-2d | %-20s | %-17s | Rp.%-7d | %-6d | %-11s |",nomor,temp->nama_kue,temp->jenis_kue,temp->harga_kue,temp->stock_kue,"FALSE");
         }
         puts(" ");
         ++nomor;
@@ -63,11 +62,11 @@ void view_result(){ // sama seperti view hanya saja yang akan di print ke file h
     int nomor = 1;
     
     system("clear");
-    printf("\n| %2s | %-20s | %-9s | %-10s | %-6s |\n","NO","NAMA KUE","JENIS KUE","HARGA","STOCK");
+    printf("| %2s | %-20s | %-17s | %-10s | %-6s |\n","NO","NAMA KUE","JENIS KUE","HARGA","STOCK");
 	while (temp != NULL)
 	{
         if(temp->visibilitas==true){
-            printf("| %-2d | %-20s | %-9s | Rp.%-7d | %-6d |",nomor,temp->nama_kue,temp->jenis_kue,temp->harga_kue,temp->stock_kue);
+            printf("| %-2d | %-20s | %-17s | Rp.%-7d | %-6d |",nomor,temp->nama_kue,temp->jenis_kue,temp->harga_kue,temp->stock_kue);
             ++nomor;
             puts(" ");
         }
@@ -93,6 +92,7 @@ int main_menu(){
 //###################### add_data part
 bool tambah(){
     char nama_kue[50];
+    char tumbal[50];
     char merit[50];
     char jenis_kue[50];
     int harga_kue,stock_kue,visibilitas_tanya;
@@ -100,8 +100,9 @@ bool tambah(){
     char ulang_edit_tanya[1];
 
     system("clear");
-    printf(" ");fgets(nama_kue,20,stdin);fflush(stdin); //<-- Tumbal ... entah kenapa tidak mau mengambil string nya
-    printf("Masukan nama kue = ");scanf("%[^\n]s",merit); //[^\n]s ini agar kita dapat memasukan data spasi .. karena string mencari spasi .. jadi kita rubah mencari enter atau \n
+    fgets(nama_kue,50,stdin);fflush(stdin); //<-- Tumbal ... entah kenapa tidak mau mengambil string nya
+    printf("Masukan nama kue = ");scanf("%[^\n]s",merit);
+    fgets(tumbal,50,stdin);fflush(stdin); //[^\n]s ini agar kita dapat memasukan data spasi .. karena string mencari spasi .. jadi kita rubah mencari enter atau \n
     printf("Masukan jenis kue (Ex. kering/basah) = ");scanf("%s",jenis_kue);
     printf("Masukan harga kue = ");scanf("%d",&harga_kue);
     printf("Masukan stock kue = ");scanf("%d",&stock_kue);
@@ -151,16 +152,16 @@ void add_data(){ // main
 }
 //###################### edit_data part
 void tambah_kurang(){
-    bool ulang_pilihan = true;
+    // bool ulang_pilihan = true;
     int pilihan_data;
-    while (ulang_pilihan == true){
+    // while (ulang_pilihan == true){
         system("clear");
         view();
         printf("Pilih data ke berapa ?");
         scanf("%d",&pilihan_data);
         if (pilihan_data > jumlah_data|| pilihan_data < 1){
             system("clear");
-            printf("Data tidak ada");
+            printf("Data tidak ada\n");
             getchar();
         }else{
             bool ulang_tambah_kurang = true;
@@ -172,7 +173,7 @@ void tambah_kurang(){
                 printf("Nomor selain itu keluar \n");
                 scanf("%d",&pilihan_edit);
                 data *temp = head;
-                for(int i = 1;i<jumlah_data;++i){
+                for(int i = 1;i<pilihan_data;++i){
                     temp = temp->next;
                 }
                 if(pilihan_edit == 1){
@@ -195,30 +196,30 @@ void tambah_kurang(){
                     ulang_tambah_kurang = false;
                 }
             }
-            char ulang_pilihan_tanya[1];
-            system("clear");
-            printf("Kembali ke menu edit ?(Y/y untuk kembali) ");
-            scanf("%s",ulang_pilihan_tanya);
-            if(strcmp(ulang_pilihan_tanya,"y") == 0 || strcmp(ulang_pilihan_tanya,"Y") == 0){
-                ulang_pilihan = false;
-            }else{
-                ulang_pilihan = true;
-            }
+            // char ulang_pilihan_tanya[1];
+            // system("clear");
+            // printf("Kembali ke menu edit ?(Y/y untuk kembali) ");
+            // scanf("%s",ulang_pilihan_tanya);
+            // if(strcmp(ulang_pilihan_tanya,"y") == 0 || strcmp(ulang_pilihan_tanya,"Y") == 0){
+            //     ulang_pilihan = false;
+            // }else{
+            //     ulang_pilihan = true;
+            // }
         }
     }
-}
+// }
 
 void edit_kue_status(){
-    bool ulang_pilihan = true;
-    char ulang_pilihan_tanya[1],nama_kue[50];
+    // bool ulang_pilihan = true;
+    char ulang_pilihan_tanya[1],nama_kue[50],tumbal[50];
     int pilihan_data,counter,nomor,visibilitas;
-    while (ulang_pilihan == true){
+    // while (ulang_pilihan == true){
         system("clear");
         view();
         printf("Pilih data ke berapa ?");
         scanf("%d",&pilihan_data);
         if (pilihan_data > jumlah_data || pilihan_data < 1){
-            printf("Data tidak ada");
+            printf("Data tidak ada\n");
         }else{
             bool ulang_edit = true;
             char ulang_edit_tanya[1];
@@ -228,8 +229,9 @@ void edit_kue_status(){
                 temp = temp->next;
             }
             while (ulang_edit == true){
-                printf(" ");fgets(nama_kue,50,stdin);fflush(stdin); //<-- Tumbal ... entah kenapa tidak mau mengambil string nya
+                fgets(nama_kue,50,stdin);fflush(stdin); //<-- Tumbal ... entah kenapa tidak mau mengambil string nya
                 printf("Nama Kue = ");scanf("%[^\n]s",temp->nama_kue);
+                fgets(tumbal,50,stdin);fflush(stdin);
                 printf("Jenis Kue = ");scanf("%s",temp->jenis_kue);
                 printf("Harga Kue = ");scanf("%d",&temp->harga_kue);
                 printf("Stock Kue = ");scanf("%d",&temp->stock_kue);
@@ -249,18 +251,19 @@ void edit_kue_status(){
                 if(strcmp(ulang_edit_tanya,"y")==0 || strcmp(ulang_edit_tanya,"Y") == 0){
                     ulang_edit = false;
                     puts("Data telah dirubah !");
+                    getchar();
                     system("clear");
                 }
             }
-            printf("Mau ulang program ini ?(y/Y untuk mengulang) ");scanf("%s",ulang_pilihan_tanya);
-            if (strcmp(ulang_edit_tanya,"y")==0 || strcmp(ulang_edit_tanya,"Y") == 0){
-                ulang_pilihan = true;
-            }else{
-                ulang_pilihan = false;
-            }
+            // printf("Mau ulang program ini ?(y/Y untuk mengulang) ");scanf("%s",ulang_pilihan_tanya);
+            // if (strcmp(ulang_edit_tanya,"y")==0 || strcmp(ulang_edit_tanya,"Y") == 0){
+            //     ulang_pilihan = true;
+            // }else{
+            //     ulang_pilihan = false;
+            // }
         }
     }
-}   
+// }   
 
 void edit_data(){ //main
     bool ulang_pilihan = true;
@@ -329,7 +332,7 @@ void termurah(){
     puts("Data Berhasil di urutkan !\n");
     view();
     printf("Press Enter ");
-    getchar(); 
+    getchar();getchar(); 
 }
  
 void termahal(){
@@ -378,7 +381,105 @@ void termahal(){
     puts("Data Berhasil di urutkan !\n");
     view();
     printf("Press Enter ");
-    getchar(); 
+    getchar();getchar(); 
+}
+
+void tersedikit(){
+    data *temp = (data *)malloc(sizeof(data));
+    
+    for(int i = 1; i<jumlah_data;++i){
+        int temp_harga,temp_stock;
+        char temp_nama[50],temp_jenis[50];
+        bool temp_visibilitas;
+        temp = head;
+        while (temp->next != NULL){
+            //data int
+            temp_harga = temp->harga_kue;
+            temp_stock = temp->stock_kue;
+            //data char
+            strcpy(temp_nama,temp->nama_kue);
+            strcpy(temp_jenis,temp->jenis_kue);
+            //data bool
+            temp_visibilitas = temp->visibilitas;
+
+            if(temp->stock_kue > temp->next->stock_kue){
+                //switch place data temp ke temp selanjutnya
+                //data int
+                temp->harga_kue = temp->next->harga_kue;
+                temp->stock_kue = temp->next->stock_kue;
+                //data char
+                strcpy(temp->nama_kue,temp->next->nama_kue);
+                strcpy(temp->jenis_kue,temp->next->jenis_kue);
+                //data bool
+                temp->visibilitas = temp->next->visibilitas;
+                
+                //data temp next dengan data awal
+                //data int
+                temp->next->harga_kue = temp_harga;
+                temp->next->stock_kue = temp_stock;
+                //data char
+                strcpy(temp->next->nama_kue,temp_nama);
+                strcpy(temp->next->jenis_kue,temp_jenis);
+                //data bool
+                temp->next->visibilitas = temp_visibilitas;
+            }
+            //pemindahan ke data selanjutnya
+            temp = temp -> next;
+        }
+    }
+    puts("Data Berhasil di urutkan !\n");
+    view();
+    printf("Press Enter ");
+    getchar();getchar(); 
+}
+ 
+void terbanyak(){
+    data *temp = (data *)malloc(sizeof(data));
+    
+    for(int i = 1; i<jumlah_data;++i){
+        int temp_harga,temp_stock;
+        char temp_nama[50],temp_jenis[50];
+        bool temp_visibilitas;
+        temp = head;
+        while (temp->next != NULL){
+            //data int
+            temp_harga = temp->harga_kue;
+            temp_stock = temp->stock_kue;
+            //data char
+            strcpy(temp_nama,temp->nama_kue);
+            strcpy(temp_jenis,temp->jenis_kue);
+            //data bool
+            temp_visibilitas = temp->visibilitas;
+
+            if(temp->stock_kue < temp->next->stock_kue){
+                //switch place data temp ke temp selanjutnya
+                //data int
+                temp->harga_kue = temp->next->harga_kue;
+                temp->stock_kue = temp->next->stock_kue;
+                //data char
+                strcpy(temp->nama_kue,temp->next->nama_kue);
+                strcpy(temp->jenis_kue,temp->next->jenis_kue);
+                //data bool
+                temp->visibilitas = temp->next->visibilitas;
+                
+                //data temp next dengan data awal
+                //data int
+                temp->next->harga_kue = temp_harga;
+                temp->next->stock_kue = temp_stock;
+                //data char
+                strcpy(temp->next->nama_kue,temp_nama);
+                strcpy(temp->next->jenis_kue,temp_jenis);
+                //data bool
+                temp->next->visibilitas = temp_visibilitas;
+            }
+            //pemindahan ke data selanjutnya
+            temp = temp -> next;
+        }
+    }
+    puts("Data Berhasil di urutkan !\n");
+    view();
+    printf("Press Enter ");
+    getchar();getchar(); 
 }
 
 void sortir_data(){
@@ -388,46 +489,53 @@ void sortir_data(){
     while (ulang == true){
         system("clear");
         printf("Sortir data menurut harga ter-\n");
-        printf("1.Murah\n");
-        printf("2.Mahal\n");
+        printf("1.Harga Termurah\n");
+        printf("2.Harga Termahal\n");
+        printf("3.Stock Tersedikit\n");
+        printf("4.Stock Terbanyak\n");
         printf("Nomor selain di atas maka kembali ke menu utama\n");
         printf("Pilihan anda = ");scanf("%d",&pilihan);
         if (pilihan == 1){
             termurah();
         }else if(pilihan == 2){
             termahal();
+        }else if(pilihan == 3){
+            tersedikit();
+        }else if(pilihan == 4){
+            terbanyak();
         }else{
             break;
         }
-        printf("Kembali ke menu sortir ? (Y / y untuk kembali) ");scanf("%s",ulang_tanya);
-        if(strcmp(ulang_tanya,"y") == 0 || strcmp(ulang_tanya,"Y")==0){
-            ulang = true;
-        }else{
-            ulang = false;
-        }
+        // printf("Kembali ke menu sortir ? (Y / y untuk kembali) ");scanf("%s",ulang_tanya);
+        // if(strcmp(ulang_tanya,"y") == 0 || strcmp(ulang_tanya,"Y")==0){
+        //     ulang = true;
+        // }else{
+        //     ulang = false;
+        // }
     }
 }
 //################### visibilitas part
 void visibilitas(){ // untuk edit visibilitas nya saja .
-    bool ulang_pilihan = true;
+    // bool ulang_pilihan = true;
     char ulang_pilihan_tanya[1];
     int pilihan_data;
 
-    while (ulang_pilihan == true){
+    // while (ulang_pilihan == true){
+        system("clear");
         view();
         printf("Pilih data keberapa yang ingin di edit visibilitas nya ? ");scanf("%d",&pilihan_data);
         if (pilihan_data > jumlah_data|| pilihan_data < 1){
-            printf("Data tidak ada");
+            printf("Data tidak ada\n");
             system("clear");
         }else{
             bool ulang_program = true;
             int pilihan_visibilitas;
             data *temp = head;
-            for(int i = 1;i<jumlah_data;++i){
+            for(int i = 1;i<pilihan_data;++i){
                 temp = temp->next;
             }
             while (ulang_program == true){
-                printf("1. Visibilitas True\n");
+                printf("1.Visibilitas True\n");
                 printf("2.Visibilitas False\n");
                 printf("Pilihan anda = ");scanf("%d",&pilihan_visibilitas);
                 if (pilihan_visibilitas < 1 || pilihan_visibilitas > 2){
@@ -435,31 +543,29 @@ void visibilitas(){ // untuk edit visibilitas nya saja .
                 }else if(pilihan_visibilitas == 1){
                     temp->visibilitas = true;
                     printf("Visibilitas telah diganti !\n");
-                    view();
                     ulang_program = false;
                 }else{
                     temp->visibilitas = false;
                     printf("Visibilitas telah diganti !\n");
-                    view();
                     ulang_program = false;
                 }
             }
-            printf("Ingin mengulang ke menu utama ? (y/Y untuk kembali) ");scanf("%s",ulang_pilihan_tanya);
-            if (strcmp(ulang_pilihan_tanya,"y") == 0 || strcmp(ulang_pilihan_tanya,"Y") == 0 ){
-                ulang_pilihan = true;
-            }else{
-                ulang_pilihan = false;
-            }
+            // printf("Ingin mengulang ke menu utama ? (y/Y untuk kembali) ");scanf("%s",ulang_pilihan_tanya);
+            // if (strcmp(ulang_pilihan_tanya,"y") == 0 || strcmp(ulang_pilihan_tanya,"Y") == 0 ){
+            //     ulang_pilihan = true;
+            // }else{
+            //     ulang_pilihan = false;
+            // }
         }
     }
-}
+// }
 
 void write_to_file(){ //
     FILE *fptr; //inisialisasi fptr pointer ke sebuah FILE
     data *temp = head; //pointer temporary ke head data
     int nomor = 1;
     fptr = fopen("kue.txt","w"); //membuat file baru dengan nama kue.txt
-    fprintf(fptr,"\n| %2s | %-20s | %-9s | %-10s | %-6s |\n","NO","NAMA KUE","JENIS KUE","HARGA","STOCK"); //hampir sama dengan printf .. fprintf untuk print ke file dengan bentuk fprintf(file,data,format)
+    fprintf(fptr,"| %2s | %-20s | %-9s | %-10s | %-6s |\n","NO","NAMA KUE","JENIS KUE","HARGA","STOCK"); //hampir sama dengan printf .. fprintf untuk print ke file dengan bentuk fprintf(file,data,format)
     while (temp != NULL)
 	{
         if(temp->visibilitas==true){
