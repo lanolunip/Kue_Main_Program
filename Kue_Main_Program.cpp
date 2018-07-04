@@ -38,11 +38,90 @@ void pushtail(int harga_kue,int stock_kue,char nama_kue[50],char jenis_kue[50],b
     tail->next = NULL; // karena tail berpindah tempat ke paling akhir maka pointer selanjutnya adalah NULL karena belum ada data
 }
 //###################### view_data part
+int paling_mahal(){
+    data *temp = head;
+
+    if(temp != NULL){
+        int termahal = temp->harga_kue;
+        if (temp->visibilitas==false){
+            termahal = 0;
+        }
+        while(temp->next!=NULL){
+            if(termahal < temp->next->harga_kue){
+                int temp1 = termahal;
+                termahal = temp->next->harga_kue;
+                temp->next->harga_kue = temp1;
+            }
+            temp = temp->next;
+        }
+        return termahal;
+    }else{
+        return 0;
+    }
+}
+
+int paling_murah(){
+    data *temp = head;
+
+    if(temp != NULL){
+        int termurah = temp->harga_kue;
+        while(temp->next!=NULL){
+            if(termurah > temp->next->harga_kue){
+                int temp1 = termurah;
+                termurah = temp->next->harga_kue;
+                temp->next->harga_kue = temp1;
+            }
+            temp = temp->next;
+        }
+        return termurah;
+    }else{
+        return 0;
+    }
+}
+
+int paling_banyak(){
+    data *temp = head;
+
+    if(temp != NULL){
+        int terbanyak = temp->stock_kue;
+        while(temp->next!=NULL){
+            if(terbanyak < temp->next->stock_kue){
+                int temp1 = terbanyak;
+                terbanyak = temp->next->stock_kue;
+                temp->next->stock_kue = temp1;
+            }
+            temp = temp->next;
+        }
+        return terbanyak;
+    }else{
+        return 0;
+    }
+}
+
+int paling_sedikit(){
+    data *temp = head;
+
+    if(temp != NULL){
+        int tersedikit = temp->stock_kue;
+        while(temp->next!=NULL){
+            if(tersedikit > temp->next->stock_kue){
+                int temp1 = tersedikit;
+                tersedikit = temp->next->stock_kue;
+                temp->next->stock_kue = temp1;
+            }
+            temp = temp->next;
+        }
+        return tersedikit;
+    }else{
+        return 0;
+    }
+}
+
 void view() //tampilan data
 {
 	data *temp = head; //pointer temp ke head data
     int nomor = 1;
-    
+    int palingBanyak,palingSedikit,palingMahal,palingMurah;
     printf("| %2s | %-20s | %-17s | %-10s | %-6s | %-11s |\n","NO","NAMA KUE","JENIS KUE","HARGA","STOCK","VISIBILITAS"); //Kop tabel
 	while (temp != NULL) //selama pointer temp tidak null .. print semua data di pointer temp.... 
 	{
@@ -56,10 +135,19 @@ void view() //tampilan data
         ++nomor;
 		temp = temp -> next; //berpindah ke pointer selanjutnya
 	}
+    palingBanyak = paling_banyak();palingSedikit=paling_sedikit();
+    palingMahal = paling_mahal();palingMurah=paling_murah(); 
+    if(palingBanyak != 0 || palingMahal != 0 ||palingMurah != 0 || palingSedikit != 0){
+        printf("\nHarga Termahal = Rp.%d\n",palingMahal);
+        printf("Harga Termurah = Rp.%d\n",palingMurah);
+        printf("Stock Terbanyak = %d\n",palingBanyak);
+        printf("Stock Tersedikit = %d",palingSedikit);
+    }
 }
 void view_result(){ // sama seperti view hanya saja yang akan di print ke file hanya yang visibilitas nya == True
     data *temp = head;
     int nomor = 1;
+    int palingBanyak,palingSedikit,palingMahal,palingMurah;
     
     system("clear");
     printf("| %2s | %-20s | %-17s | %-10s | %-6s |\n","NO","NAMA KUE","JENIS KUE","HARGA","STOCK");
@@ -71,7 +159,15 @@ void view_result(){ // sama seperti view hanya saja yang akan di print ke file h
             puts(" ");
         }
 		temp = temp -> next;
-	}   
+	}
+    palingBanyak = paling_banyak();palingSedikit=paling_sedikit();
+    palingMahal = paling_mahal();palingMurah=paling_murah(); 
+    if(palingBanyak != 0 || palingMahal != 0 ||palingMurah != 0 || palingSedikit != 0){
+        printf("\nHarga Termahal = Rp.%d\n",palingMahal);
+        printf("Harga Termurah = Rp.%d\n",palingMurah);
+        printf("Stock Terbanyak = %d\n",palingBanyak);
+        printf("Stock Tersedikit = %d",palingSedikit);
+    }   
 }
 
 int main_menu(){
@@ -92,7 +188,6 @@ int main_menu(){
 //###################### add_data part
 bool tambah(){
     char nama_kue[50];
-    char tumbal[50];
     char merit[50];
     char jenis_kue[50];
     int harga_kue,stock_kue,visibilitas_tanya;
@@ -101,8 +196,7 @@ bool tambah(){
 
     system("clear");
     fgets(nama_kue,50,stdin);fflush(stdin); //<-- Tumbal ... entah kenapa tidak mau mengambil string nya
-    printf("Masukan nama kue = ");scanf("%[^\n]s",merit);
-    fgets(tumbal,50,stdin);fflush(stdin); //[^\n]s ini agar kita dapat memasukan data spasi .. karena string mencari spasi .. jadi kita rubah mencari enter atau \n
+    printf("Masukan nama kue = ");scanf("%[^\n]s",merit);//[^\n]s ini agar kita dapat memasukan data spasi .. karena string mencari spasi .. jadi kita rubah mencari enter atau \n
     printf("Masukan jenis kue (Ex. kering/basah) = ");scanf("%s",jenis_kue);
     printf("Masukan harga kue = ");scanf("%d",&harga_kue);
     printf("Masukan stock kue = ");scanf("%d",&stock_kue);
@@ -211,7 +305,7 @@ void tambah_kurang(){
 
 void edit_kue_status(){
     // bool ulang_pilihan = true;
-    char ulang_pilihan_tanya[1],nama_kue[50],tumbal[50];
+    char ulang_pilihan_tanya[1],nama_kue[50];
     int pilihan_data,counter,nomor,visibilitas;
     // while (ulang_pilihan == true){
         system("clear");
@@ -231,7 +325,6 @@ void edit_kue_status(){
             while (ulang_edit == true){
                 fgets(nama_kue,50,stdin);fflush(stdin); //<-- Tumbal ... entah kenapa tidak mau mengambil string nya
                 printf("Nama Kue = ");scanf("%[^\n]s",temp->nama_kue);
-                fgets(tumbal,50,stdin);fflush(stdin);
                 printf("Jenis Kue = ");scanf("%s",temp->jenis_kue);
                 printf("Harga Kue = ");scanf("%d",&temp->harga_kue);
                 printf("Stock Kue = ");scanf("%d",&temp->stock_kue);
@@ -564,6 +657,10 @@ void write_to_file(){ //
     FILE *fptr; //inisialisasi fptr pointer ke sebuah FILE
     data *temp = head; //pointer temporary ke head data
     int nomor = 1;
+    int palingBanyak,palingSedikit,palingMahal,palingMurah;
+    palingBanyak = paling_banyak();palingSedikit=paling_sedikit();
+    palingMahal = paling_mahal();palingMurah=paling_murah(); 
+
     fptr = fopen("kue.txt","w"); //membuat file baru dengan nama kue.txt
     fprintf(fptr,"| %2s | %-20s | %-9s | %-10s | %-6s |\n","NO","NAMA KUE","JENIS KUE","HARGA","STOCK"); //hampir sama dengan printf .. fprintf untuk print ke file dengan bentuk fprintf(file,data,format)
     while (temp != NULL)
@@ -573,7 +670,13 @@ void write_to_file(){ //
             ++nomor;
         }
 		temp = temp -> next;
-	}   
+	}
+    if(palingBanyak != 0 || palingMahal != 0 ||palingMurah != 0 || palingSedikit != 0){
+        fprintf(fptr,"Harga Termahal = Rp.%d\n",palingMahal);
+        fprintf(fptr,"Harga Termurah = Rp.%d\n",palingMurah);
+        fprintf(fptr,"Stock Terbanyak = %d\n",palingBanyak);
+        fprintf(fptr,"Stock Tersedikit = %d",palingSedikit);
+    }      
     fclose(fptr); //setelah di isi .file di tutup
 }
 //################### main part
