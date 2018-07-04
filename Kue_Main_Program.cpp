@@ -39,20 +39,17 @@ void pushtail(int harga_kue,int stock_kue,char nama_kue[50],char jenis_kue[50],b
 }
 //###################### view_data part
 int paling_mahal(){
-    data *temp = head;
+    data *temporary = head;
 
-    if(temp != NULL){
-        int termahal = temp->harga_kue;
-        if (temp->visibilitas==false){
-            termahal = 0;
-        }
-        while(temp->next!=NULL){
-            if(termahal < temp->next->harga_kue){
+    if(temporary != NULL){
+        int termahal = temporary->harga_kue;
+        while(temporary->next!=NULL){
+            if(termahal < temporary->next->harga_kue && temporary->next->visibilitas!=false){
                 int temp1 = termahal;
-                termahal = temp->next->harga_kue;
-                temp->next->harga_kue = temp1;
+                termahal = temporary->next->harga_kue;
+                temporary->next->harga_kue = temp1;
             }
-            temp = temp->next;
+            temporary = temporary->next;
         }
         return termahal;
     }else{
@@ -61,17 +58,17 @@ int paling_mahal(){
 }
 
 int paling_murah(){
-    data *temp = head;
+    data *temporary = head;
 
-    if(temp != NULL){
-        int termurah = temp->harga_kue;
-        while(temp->next!=NULL){
-            if(termurah > temp->next->harga_kue){
+    if(temporary != NULL){
+        int termurah = temporary->harga_kue;
+        while(temporary->next!=NULL){
+            if(termurah > temporary->next->harga_kue && temporary->next->visibilitas!=false){
                 int temp1 = termurah;
-                termurah = temp->next->harga_kue;
-                temp->next->harga_kue = temp1;
+                termurah = temporary->next->harga_kue;
+                temporary->next->harga_kue = temp1;
             }
-            temp = temp->next;
+            temporary = temporary->next;
         }
         return termurah;
     }else{
@@ -80,17 +77,17 @@ int paling_murah(){
 }
 
 int paling_banyak(){
-    data *temp = head;
+    data *temporary = head;
 
-    if(temp != NULL){
-        int terbanyak = temp->stock_kue;
-        while(temp->next!=NULL){
-            if(terbanyak < temp->next->stock_kue){
+    if(temporary != NULL){
+        int terbanyak = temporary->stock_kue;
+        while(temporary->next!=NULL){
+            if(terbanyak < temporary->next->stock_kue && temporary->next->visibilitas!=false){
                 int temp1 = terbanyak;
-                terbanyak = temp->next->stock_kue;
-                temp->next->stock_kue = temp1;
+                terbanyak = temporary->next->stock_kue;
+                temporary->next->stock_kue = temp1;
             }
-            temp = temp->next;
+            temporary = temporary->next;
         }
         return terbanyak;
     }else{
@@ -99,75 +96,133 @@ int paling_banyak(){
 }
 
 int paling_sedikit(){
-    data *temp = head;
+    data *temporary = head;
 
-    if(temp != NULL){
-        int tersedikit = temp->stock_kue;
-        while(temp->next!=NULL){
-            if(tersedikit > temp->next->stock_kue){
+    if(temporary != NULL){
+        int tersedikit = temporary->harga_kue;
+        while(temporary->next!=NULL){
+            if(tersedikit < temporary->next->harga_kue && temporary->next->visibilitas!=false){
                 int temp1 = tersedikit;
-                tersedikit = temp->next->stock_kue;
-                temp->next->stock_kue = temp1;
+                tersedikit = temporary->next->harga_kue;
+                temporary->next->harga_kue = temp1;
             }
-            temp = temp->next;
+            temporary = temporary->next;
         }
         return tersedikit;
     }else{
         return 0;
-    }
+    }      
 }
 
 void view() //tampilan data
 {
 	data *temp = head; //pointer temp ke head data
     int nomor = 1;
-    int palingBanyak,palingSedikit,palingMahal,palingMurah;
-    printf("| %2s | %-20s | %-17s | %-10s | %-6s | %-11s |\n","NO","NAMA KUE","JENIS KUE","HARGA","STOCK","VISIBILITAS"); //Kop tabel
+
+        int palingBanyak ;
+        int palingSedikit;
+        int palingMahal;
+        int palingMurah;
+
+    if (temp == NULL){
+        palingBanyak = 0;
+        palingSedikit = 0;
+        palingMahal = 0;
+        palingMurah = 0;
+    }else{
+        palingBanyak = temp->stock_kue;
+        palingSedikit = temp->stock_kue;
+        palingMahal = temp->harga_kue;
+        palingMurah = temp->harga_kue;
+    }
+
+    printf("| %2s | %-20s | %-10s | %-10s | %-6s | %-11s |\n","NO","NAMA KUE","JENIS KUE","HARGA","STOCK","VISIBILITAS"); //Kop tabel
 	while (temp != NULL) //selama pointer temp tidak null .. print semua data di pointer temp.... 
 	{
         if(temp->visibilitas==true){ 
-            printf("| %-2d | %-20s | %-17s | Rp.%-7d | %-6d | %-11s |",nomor,temp->nama_kue,temp->jenis_kue,temp->harga_kue,temp->stock_kue,"TRUE");
+            printf("| %-2d | %-20s | %-10s | Rp.%-7d | %-6d | %-11s |",nomor,temp->nama_kue,temp->jenis_kue,temp->harga_kue,temp->stock_kue,"TRUE");
         }
         else{
-            printf("| %-2d | %-20s | %-17s | Rp.%-7d | %-6d | %-11s |",nomor,temp->nama_kue,temp->jenis_kue,temp->harga_kue,temp->stock_kue,"FALSE");
+            printf("| %-2d | %-20s | %-10s | Rp.%-7d | %-6d | %-11s |",nomor,temp->nama_kue,temp->jenis_kue,temp->harga_kue,temp->stock_kue,"FALSE");
         }
+        if (palingBanyak < temp->stock_kue){ //paling Banyak
+            palingBanyak = temp->stock_kue;
+        }
+        if (palingSedikit > temp->stock_kue){ //paling Sedikit
+            palingSedikit = temp->stock_kue;
+        }
+        if (palingMahal<temp->harga_kue){ //paling mahal
+            palingMahal = temp->harga_kue;
+        }
+        if (palingMurah>temp->harga_kue){ //paling murah
+            palingMurah = temp->harga_kue;
+        }
+
         puts(" ");
         ++nomor;
 		temp = temp -> next; //berpindah ke pointer selanjutnya
 	}
-    palingBanyak = paling_banyak();palingSedikit=paling_sedikit();
-    palingMahal = paling_mahal();palingMurah=paling_murah(); 
-    if(palingBanyak != 0 || palingMahal != 0 ||palingMurah != 0 || palingSedikit != 0){
+
+    if(palingMahal != 0 ||palingMurah != 0 || palingSedikit != 0 && temp == NULL){ 
+        printf("\nHarga Termahal = Rp.%d\n",palingMahal);
+        printf("Harga Termurah = Rp.%d\n",palingMurah);
+        printf("Stock Terbanyak = %d\n",palingBanyak);
+        printf("Stock Tersedikit = %d\n",palingSedikit);
+    }
+    printf("Hati Hati .. Harga dan stock paling mahal / murah meliat visibilitas");
+}
+void view_result(){ // sama seperti view hanya saja yang akan di print ke file hanya yang visibilitas nya == True
+    data *temp = head; //pointer temp ke head data
+    int nomor = 1;
+
+    int palingBanyak ;
+    int palingSedikit;
+    int palingMahal;
+    int palingMurah;
+
+    if (temp == NULL){
+        palingBanyak = 0;
+        palingSedikit = 0;
+        palingMahal = 0;
+        palingMurah = 0;
+    }else{
+        palingBanyak = temp->stock_kue;
+        palingSedikit = temp->stock_kue;
+        palingMahal = temp->harga_kue;
+        palingMurah = temp->harga_kue;
+    }
+
+    printf("| %2s | %-20s | %-10s | %-10s | %-6s |\n","NO","NAMA KUE","JENIS KUE","HARGA","STOCK"); //Kop tabel
+	while (temp != NULL) //selama pointer temp tidak null .. print semua data di pointer temp.... 
+	{
+        if(temp->visibilitas==true){ 
+            printf("| %-2d | %-20s | %-10s | Rp.%-7d | %-6d |",nomor,temp->nama_kue,temp->jenis_kue,temp->harga_kue,temp->stock_kue);
+        }
+        if (palingBanyak < temp->stock_kue && temp->visibilitas == true){ //paling Banyak
+            palingBanyak = temp->stock_kue;
+        }
+        if (palingSedikit > temp->stock_kue && temp->visibilitas == true){ //paling Sedikit
+            palingSedikit = temp->stock_kue;
+        }
+        if (palingMahal<temp->harga_kue && temp->visibilitas == true){ //paling mahal
+            palingMahal = temp->harga_kue;
+        }
+        if (palingMurah>temp->harga_kue && temp->visibilitas == true){ //paling murah
+            palingMurah = temp->harga_kue;
+        }
+
+        puts(" ");
+        ++nomor;
+		temp = temp -> next; //berpindah ke pointer selanjutnya
+	}
+    // palingBanyak = paling_banyak();palingSedikit=paling_sedikit();
+    // palingMahal = paling_mahal();palingMurah=paling_murah(); 
+    if(palingMahal != 0 || palingMurah != 0 || palingSedikit != 0 && temp == NULL){ //|| palingMahal != 0 ||palingMurah != 0 || palingSedikit != 0){
         printf("\nHarga Termahal = Rp.%d\n",palingMahal);
         printf("Harga Termurah = Rp.%d\n",palingMurah);
         printf("Stock Terbanyak = %d\n",palingBanyak);
         printf("Stock Tersedikit = %d",palingSedikit);
     }
-}
-void view_result(){ // sama seperti view hanya saja yang akan di print ke file hanya yang visibilitas nya == True
-    data *temp = head;
-    int nomor = 1;
-    int palingBanyak,palingSedikit,palingMahal,palingMurah;
-    
-    system("clear");
-    printf("| %2s | %-20s | %-17s | %-10s | %-6s |\n","NO","NAMA KUE","JENIS KUE","HARGA","STOCK");
-	while (temp != NULL)
-	{
-        if(temp->visibilitas==true){
-            printf("| %-2d | %-20s | %-17s | Rp.%-7d | %-6d |",nomor,temp->nama_kue,temp->jenis_kue,temp->harga_kue,temp->stock_kue);
-            ++nomor;
-            puts(" ");
-        }
-		temp = temp -> next;
-	}
-    palingBanyak = paling_banyak();palingSedikit=paling_sedikit();
-    palingMahal = paling_mahal();palingMurah=paling_murah(); 
-    if(palingBanyak != 0 || palingMahal != 0 ||palingMurah != 0 || palingSedikit != 0){
-        printf("\nHarga Termahal = Rp.%d\n",palingMahal);
-        printf("Harga Termurah = Rp.%d\n",palingMurah);
-        printf("Stock Terbanyak = %d\n",palingBanyak);
-        printf("Stock Tersedikit = %d",palingSedikit);
-    }   
 }
 
 int main_menu(){
@@ -340,10 +395,10 @@ void edit_kue_status(){
                         }
                     }
                 }while (visibilitas_tanya < 1 || visibilitas_tanya > 2);
-                printf ("Setuju Dengan perubahan di atas? (y/Y untuk setuju) ");scanf("%s",ulang_edit_tanya);
+                printf ("\nSetuju Dengan perubahan di atas? (y/Y untuk setuju) ");scanf("%s",ulang_edit_tanya);
                 if(strcmp(ulang_edit_tanya,"y")==0 || strcmp(ulang_edit_tanya,"Y") == 0){
                     ulang_edit = false;
-                    puts("Data telah dirubah !");
+                    puts("\nData telah dirubah !");
                     getchar();
                     system("clear");
                 }
@@ -380,13 +435,13 @@ void edit_data(){ //main
 }
 //###################### sortir_data part
 void termurah(){
-    data *temp = (data *)malloc(sizeof(data));
+    data *temp = head;
     
     for(int i = 1; i<jumlah_data;++i){
         int temp_harga,temp_stock;
         char temp_nama[50],temp_jenis[50];
         bool temp_visibilitas;
-        temp = head;
+        // temp = head;
         while (temp->next != NULL){
             //data int
             temp_harga = temp->harga_kue;
@@ -424,18 +479,18 @@ void termurah(){
     }
     puts("Data Berhasil di urutkan !\n");
     view();
-    printf("Press Enter ");
+    printf("\nPress Enter ");
     getchar();getchar(); 
 }
  
 void termahal(){
-    data *temp = (data *)malloc(sizeof(data));
+    data *temp = head;
     
     for(int i = 1; i<jumlah_data;++i){
         int temp_harga,temp_stock;
         char temp_nama[50],temp_jenis[50];
         bool temp_visibilitas;
-        temp = head;
+        // temp = head;
         while (temp->next != NULL){
             //data int
             temp_harga = temp->harga_kue;
@@ -473,18 +528,18 @@ void termahal(){
     }
     puts("Data Berhasil di urutkan !\n");
     view();
-    printf("Press Enter ");
+    printf("\nPress Enter ");
     getchar();getchar(); 
 }
 
 void tersedikit(){
-    data *temp = (data *)malloc(sizeof(data));
+    data *temp = head;
     
     for(int i = 1; i<jumlah_data;++i){
         int temp_harga,temp_stock;
         char temp_nama[50],temp_jenis[50];
         bool temp_visibilitas;
-        temp = head;
+        // temp = head;
         while (temp->next != NULL){
             //data int
             temp_harga = temp->harga_kue;
@@ -522,7 +577,7 @@ void tersedikit(){
     }
     puts("Data Berhasil di urutkan !\n");
     view();
-    printf("Press Enter ");
+    printf("\nPress Enter ");
     getchar();getchar(); 
 }
  
@@ -571,21 +626,121 @@ void terbanyak(){
     }
     puts("Data Berhasil di urutkan !\n");
     view();
-    printf("Press Enter ");
+    printf("\nPress Enter ");
+    getchar();getchar(); 
+}
+
+void daritrue(){
+   data *temp = (data *)malloc(sizeof(data));
+    
+    for(int i = 1; i<jumlah_data;++i){
+        int temp_harga,temp_stock;
+        char temp_nama[50],temp_jenis[50];
+        bool temp_visibilitas;
+        temp = head;
+        while (temp->next != NULL){
+            //data int
+            temp_harga = temp->harga_kue;
+            temp_stock = temp->stock_kue;
+            //data char
+            strcpy(temp_nama,temp->nama_kue);
+            strcpy(temp_jenis,temp->jenis_kue);
+            //data bool
+            temp_visibilitas = temp->visibilitas;
+
+            if(temp->visibilitas==false && temp->next->visibilitas){
+                //switch place data temp ke temp selanjutnya
+                //data int
+                temp->harga_kue = temp->next->harga_kue;
+                temp->stock_kue = temp->next->stock_kue;
+                //data char
+                strcpy(temp->nama_kue,temp->next->nama_kue);
+                strcpy(temp->jenis_kue,temp->next->jenis_kue);
+                //data bool
+                temp->visibilitas = temp->next->visibilitas;
+                
+                //data temp next dengan data awal
+                //data int
+                temp->next->harga_kue = temp_harga;
+                temp->next->stock_kue = temp_stock;
+                //data char
+                strcpy(temp->next->nama_kue,temp_nama);
+                strcpy(temp->next->jenis_kue,temp_jenis);
+                //data bool
+                temp->next->visibilitas = temp_visibilitas;
+            }
+            //pemindahan ke data selanjutnya
+            temp = temp -> next;
+        }
+    }
+    puts("Data Berhasil di urutkan !\n");
+    view();
+    printf("\nPress Enter ");
+    getchar();getchar(); 
+}
+
+void darifalse(){
+    data *temp = (data *)malloc(sizeof(data));
+    
+    for(int i = 1; i<jumlah_data;++i){
+        int temp_harga,temp_stock;
+        char temp_nama[50],temp_jenis[50];
+        bool temp_visibilitas;
+        temp = head;
+        while (temp->next != NULL){
+            //data int
+            temp_harga = temp->harga_kue;
+            temp_stock = temp->stock_kue;
+            //data char
+            strcpy(temp_nama,temp->nama_kue);
+            strcpy(temp_jenis,temp->jenis_kue);
+            //data bool
+            temp_visibilitas = temp->visibilitas;
+
+            if(temp->visibilitas == true && temp->next->visibilitas == false){
+                //switch place data temp ke temp selanjutnya
+                //data int
+                temp->harga_kue = temp->next->harga_kue;
+                temp->stock_kue = temp->next->stock_kue;
+                //data char
+                strcpy(temp->nama_kue,temp->next->nama_kue);
+                strcpy(temp->jenis_kue,temp->next->jenis_kue);
+                //data bool
+                temp->visibilitas = temp->next->visibilitas;
+                
+                //data temp next dengan data awal
+                //data int
+                temp->next->harga_kue = temp_harga;
+                temp->next->stock_kue = temp_stock;
+                //data char
+                strcpy(temp->next->nama_kue,temp_nama);
+                strcpy(temp->next->jenis_kue,temp_jenis);
+                //data bool
+                temp->next->visibilitas = temp_visibilitas;
+            }
+            //pemindahan ke data selanjutnya
+            temp = temp -> next;
+        }
+    }
+    puts("Data Berhasil di urutkan !\n");
+    view();
+    printf("\nPress Enter ");
     getchar();getchar(); 
 }
 
 void sortir_data(){
-    bool ulang = true;
+    // bool ulang = true;
     int pilihan;
     char ulang_tanya[1];
-    while (ulang == true){
+    // while (ulang == true){
         system("clear");
-        printf("Sortir data menurut harga ter-\n");
+        printf("Sortir data dari:\n");
         printf("1.Harga Termurah\n");
         printf("2.Harga Termahal\n");
         printf("3.Stock Tersedikit\n");
         printf("4.Stock Terbanyak\n");
+        printf("5.Visibiltas True\n");
+        printf("6.Visibilitas False\n");
         printf("Nomor selain di atas maka kembali ke menu utama\n");
         printf("Pilihan anda = ");scanf("%d",&pilihan);
         if (pilihan == 1){
@@ -596,8 +751,12 @@ void sortir_data(){
             tersedikit();
         }else if(pilihan == 4){
             terbanyak();
-        }else{
-            break;
+        }else if(pilihan == 5){
+            daritrue();
+        }else if(pilihan == 6){
+            darifalse();
+        // }else{
+        //     break;
         }
         // printf("Kembali ke menu sortir ? (Y / y untuk kembali) ");scanf("%s",ulang_tanya);
         // if(strcmp(ulang_tanya,"y") == 0 || strcmp(ulang_tanya,"Y")==0){
@@ -605,7 +764,7 @@ void sortir_data(){
         // }else{
         //     ulang = false;
         // }
-    }
+    // }
 }
 //################### visibilitas part
 void visibilitas(){ // untuk edit visibilitas nya saja .
@@ -657,26 +816,55 @@ void write_to_file(){ //
     FILE *fptr; //inisialisasi fptr pointer ke sebuah FILE
     data *temp = head; //pointer temporary ke head data
     int nomor = 1;
-    int palingBanyak,palingSedikit,palingMahal,palingMurah;
-    palingBanyak = paling_banyak();palingSedikit=paling_sedikit();
-    palingMahal = paling_mahal();palingMurah=paling_murah(); 
+    fptr = fopen("Kue.txt","w");
 
-    fptr = fopen("kue.txt","w"); //membuat file baru dengan nama kue.txt
-    fprintf(fptr,"| %2s | %-20s | %-9s | %-10s | %-6s |\n","NO","NAMA KUE","JENIS KUE","HARGA","STOCK"); //hampir sama dengan printf .. fprintf untuk print ke file dengan bentuk fprintf(file,data,format)
-    while (temp != NULL)
+    int palingBanyak;
+    int palingSedikit;
+    int palingMahal;
+    int palingMurah;
+
+    if (temp == NULL){
+        palingBanyak = 0;
+        palingSedikit = 0;
+        palingMahal = 0;
+        palingMurah = 0;
+    }else{
+        palingBanyak = temp->stock_kue;
+        palingSedikit = temp->stock_kue;
+        palingMahal = temp->harga_kue;
+        palingMurah = temp->harga_kue;
+    }
+
+    fprintf(fptr,"| %2s | %-20s | %-10s | %-10s | %-6s |\n","NO","NAMA KUE","JENIS KUE","HARGA","STOCK"); //Kop tabel
+	while (temp != NULL) //selama pointer temp tidak null .. print semua data di pointer temp.... 
 	{
-        if(temp->visibilitas==true){
-            fprintf(fptr,"| %-2d | %-20s | %-9s | Rp.%-7d | %-6d |\n",nomor,temp->nama_kue,temp->jenis_kue,temp->harga_kue,temp->stock_kue);
+        if(temp->visibilitas==true){ 
+            fprintf(fptr,"| %-2d | %-20s | %-10s | Rp.%-7d | %-6d |\n",nomor,temp->nama_kue,temp->jenis_kue,temp->harga_kue,temp->stock_kue);
             ++nomor;
         }
-		temp = temp -> next;
+
+        if (palingBanyak < temp->stock_kue && temp->visibilitas == true){ //paling Banyak
+            palingBanyak = temp->stock_kue;
+        }
+        if (palingSedikit > temp->stock_kue && temp->visibilitas == true){ //paling Sedikit
+            palingSedikit = temp->stock_kue;
+        }
+        if (palingMahal < temp->harga_kue && temp->visibilitas == true){ //paling mahal
+            palingMahal = temp->harga_kue;
+        }
+        if (palingMurah > temp->harga_kue && temp->visibilitas == true){ //paling murah
+            palingMurah = temp->harga_kue;
+        }
+
+		temp = temp -> next; //berpindah ke pointer selanjutnya
 	}
-    if(palingBanyak != 0 || palingMahal != 0 ||palingMurah != 0 || palingSedikit != 0){
-        fprintf(fptr,"Harga Termahal = Rp.%d\n",palingMahal);
+
+    if( temp == NULL){ 
+        fprintf(fptr,"\nHarga Termahal = Rp.%d\n",palingMahal);
         fprintf(fptr,"Harga Termurah = Rp.%d\n",palingMurah);
         fprintf(fptr,"Stock Terbanyak = %d\n",palingBanyak);
         fprintf(fptr,"Stock Tersedikit = %d",palingSedikit);
-    }      
+    }
     fclose(fptr); //setelah di isi .file di tutup
 }
 //################### main part
@@ -697,8 +885,9 @@ int main(){
         }else if(pilihan == 4){
             visibilitas();
         }else if (pilihan == 5){
+            system("clear");
             view_result();
-            puts("Press Enter");
+            puts("\nPress Enter");
             getchar();getchar();
         }
     }
